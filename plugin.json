@@ -1,0 +1,11 @@
+{
+  "name": "DateDeck",
+  "author": "JD",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": ["customization"],
+    "description": "Shows the date next to the clock in the Steam Deck header.",
+    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/decky-plugin-template"
+  }
+}
