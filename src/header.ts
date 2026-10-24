@@ -16,7 +16,8 @@ const TIME_RE = /^\s*\d{1,2}:\d{2}(\s?[AaPp]\.?[Mm]\.?)?\s*$/;
 const HEADER_MAX_TOP_PX = 120; // clock must sit within this distance of the top
 const RESCAN_THROTTLE_MS = 2000; // how often to search again while the clock is missing
 const TICK_MS = 1000;
-const SPACING_PX = 8;
+const INNER_SPACING_PX = 4; // gap between the date and the clock
+const OUTER_TRIM_PX = 4; // how much to pull in the date's far side (never below zero spacing)
 
 interface DocState {
   timeEl: HTMLElement;
@@ -95,6 +96,30 @@ function detach(state: DocState) {
   state.dateEl.remove();
 }
 
+function px(value: string | undefined): number {
+  const n = parseFloat(value ?? "");
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * Margin for the date's far side (the side away from the clock). Our inline margin
+ * replaces whatever margin the copied class has, so start from the clock's own margin
+ * and subtract a trim, capped by the spacing that side actually has (clock margin +
+ * padding + the header's flex gap) so the date never gets pushed into its neighbour.
+ */
+function outerMargin(timeEl: HTMLElement, left: boolean): string {
+  const win = timeEl.ownerDocument.defaultView;
+  if (!win) return "";
+  const cs = win.getComputedStyle(timeEl);
+  const parentCs = timeEl.parentElement ? win.getComputedStyle(timeEl.parentElement) : null;
+
+  const margin = px(left ? cs.marginLeft : cs.marginRight);
+  const padding = px(left ? cs.paddingLeft : cs.paddingRight);
+  const gap = px(parentCs?.columnGap);
+  const trim = Math.min(OUTER_TRIM_PX, Math.max(0, margin + padding + gap));
+  return `${margin - trim}px`;
+}
+
 function place(state: DocState) {
   const settings = getSettings();
   const { timeEl, dateEl } = state;
@@ -111,8 +136,9 @@ function place(state: DocState) {
     else timeEl.after(dateEl);
   }
 
-  dateEl.style.marginLeft = left ? "" : `${SPACING_PX}px`;
-  dateEl.style.marginRight = left ? `${SPACING_PX}px` : "";
+  const outer = outerMargin(timeEl, left);
+  dateEl.style.marginLeft = left ? outer : `${INNER_SPACING_PX}px`;
+  dateEl.style.marginRight = left ? `${INNER_SPACING_PX}px` : outer;
 }
 
 function syncDocument(doc: Document) {

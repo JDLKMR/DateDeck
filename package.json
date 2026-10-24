@@ -1,6 +1,6 @@
 {
   "name": "datedeck",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shows the date next to the clock in the Steam Deck header.",
   "type": "module",
   "scripts": {

@@ -13,7 +13,7 @@ function Content() {
   return (
     <PanelSection title="Date">
       <PanelSectionRow>
-        <div style={{ textAlign: "center", opacity: 0.8, paddingBottom: "8px" }}>
+        <div style={{ textAlign: "center", opacity: 0.8, paddingBottom: "4px" }}>
           {formatDate(new Date(), settings)}
         </div>
       </PanelSectionRow>
