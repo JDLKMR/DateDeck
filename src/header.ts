@@ -16,7 +16,7 @@ const TIME_RE = /^\s*\d{1,2}:\d{2}(\s?[AaPp]\.?[Mm]\.?)?\s*$/;
 const HEADER_MAX_TOP_PX = 120; // clock must sit within this distance of the top
 const RESCAN_THROTTLE_MS = 2000; // how often to search again while the clock is missing
 const TICK_MS = 1000;
-const INNER_SPACING_PX = 4; // gap between the date and the clock
+const INNER_SPACING_PX = 0; // gap between the date and the clock
 const OUTER_TRIM_PX = 4; // how much to pull in the date's far side (never below zero spacing)
 
 interface DocState {
